@@ -85,10 +85,14 @@ class ContactsController extends Controller
 
     function delete($id)
     {
-        Contact::destroy($id);
-        return response()->json([
-            'message' => 'user successfully deleted',
+        try {
+            Contact::destroy($id);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'user successfully deleted',
 
-        ], 200);
+            ], 200);
+        }
+
     }
 }

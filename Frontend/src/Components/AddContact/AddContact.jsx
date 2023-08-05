@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { addContact } from '../../helpers/async.helpers';
 import { toBase64 } from '../../helpers/input.helpers';
 
+/* 
+TODOS:
+ - Image preview, split the form in half image on the right
+ - Recieve Image on the backend, save in public
+ - handle error display
+ - Display success message
+ - Fix Styling
+                
+*/
 const AddContact = () => {
   const [data, setData] = useState({
     name: '',
