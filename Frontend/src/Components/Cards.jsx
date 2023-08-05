@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Card from './Card/Card';
 import data from '../dummy-data';
-
-import { fetchContacts, deleteContact } from '../helpers/async.helpers';
-const Cards = () => {
-  const [contacts, setContacts] = useState();
-
+import { deleteContact } from '../helpers/async.helpers';
+const Cards = ({ contacts, setContacts }) => {
   const deleteCard = async (id) => {
     const newContacts = contacts.filter((element) => element.id != id);
     setContacts(newContacts);
     deleteContact(id);
   };
-
-  useEffect(() => {
-    fetchContacts(setContacts);
-  }, []);
 
   const cards = () => {
     if (contacts) {

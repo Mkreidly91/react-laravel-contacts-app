@@ -12,4 +12,15 @@ const deleteContact = async (id) => {
   return;
 };
 
-export { fetchContacts, deleteContact };
+const addContact = async (data) => {
+  try {
+    const res = await axios.post(
+      'http://127.0.0.1:8000/api/contacts/add',
+      data
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { fetchContacts, deleteContact, addContact };
