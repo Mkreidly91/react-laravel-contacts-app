@@ -30,3 +30,16 @@ a {
 .pink {
   background-color: var(--app-pink);
 }
+
+.rubik {
+  font-family: 'Rubik', sans-serif;
+}
+
+.monster {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.neumorph {
+  box-shadow: inset 1px 1px 1px #fff, -9px -9px 9px #e6e6e6,
+    9px 9px 20px rgba(199, 199, 199, 0.8);
+}

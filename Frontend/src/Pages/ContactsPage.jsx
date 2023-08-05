@@ -6,7 +6,7 @@ const ContactsPage = (props) => {
   return (
     <div className="page-container  h-full pink p-40 ">
       <div className="flex justify-between items-center">
-        <div className="text-2xl">Contacts</div>
+        <div className="text-2xl font-bold">Contacts</div>
         <div className="controls flex gap-4 items-center">
           <input
             className="bg-slate-300 rounded placeholder:text-center placeholder:text-gray-500 p-1"

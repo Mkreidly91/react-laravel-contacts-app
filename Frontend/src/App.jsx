@@ -4,7 +4,7 @@ import Cards from './Components/Cards';
 import ContactsPage from './Pages/ContactsPage';
 function App() {
   return (
-    <div className="h-full">
+    <div className="h-full monster">
       <ContactsPage>
         <Cards />
       </ContactsPage>
