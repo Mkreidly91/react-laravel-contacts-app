@@ -19,3 +19,14 @@ a {
   text-decoration: none;
   font: inherit;
 }
+#root {
+  height: 100%;
+}
+
+:root {
+  --app-pink: #f8f8f8;
+}
+
+.pink {
+  background-color: var(--app-pink);
+}
