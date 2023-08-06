@@ -118,7 +118,14 @@ const AddContact = () => {
     setData((prev) => ({ ...prev, location: e }));
   }
 
-  async function save() {}
+  async function save() {
+    const { errors } = await addContact(data);
+    console.log(errors);
+    if (!errors) return;
+    setErrors({
+      ...errors,
+    });
+  }
 
   const { name, number, location } = data;
   return (
@@ -130,14 +137,15 @@ const AddContact = () => {
           value={name}
           type="text"
           onChange={textInputHandler}
+          error={errors.name}
         />
-
         <ContactInput
           name="number"
           label="Number"
           value={number}
           type="text"
           onChange={textInputHandler}
+          error={errors.number}
         />
         <Combobox name="select" value={data.location} onChange={handleSelect}>
           <div className="relative">
@@ -175,32 +183,31 @@ const AddContact = () => {
           </div>
         </Combobox>
         <div className="flex gap-10">
-          <input
-            type="text"
+          <ContactInput
             name="lon"
+            label="Lon"
             value={data.location.coordinates.lon}
-            onChange={textInputHandler}
-            className="rounded"
-          />
-          <input
             type="text"
-            name="lat"
-            value={data.location.coordinates.lat}
             onChange={textInputHandler}
-            className="rounded"
+            error={errors.lon}
+            className={'w-24'}
+          />
+          <ContactInput
+            name="lat"
+            label="lat"
+            value={data.location.coordinates.lat}
+            type="text"
+            onChange={textInputHandler}
+            error={errors.lat}
+            className={'w-24'}
           />
         </div>
 
         <div className="flex gap-10">
-          <div className="button">SAVE</div>
-          <div
-            className="button"
-            onClick={() => {
-              addContact(data);
-            }}
-          >
-            Cancel
+          <div className="button" onClick={save}>
+            SAVE
           </div>
+          <div className="button">Cancel</div>
         </div>
       </div>
       <div className="image-select-preview flex flex-col w-[300px]  rounded">

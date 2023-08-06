@@ -9,6 +9,7 @@ const ContactInput = ({
   type,
   className,
 }) => {
+  const isArray = Array.isArray(error);
   return (
     <div className="input-container flex flex-col gap-2 font-semibold">
       <label>{label}</label>
@@ -19,7 +20,15 @@ const ContactInput = ({
         type={type}
         onChange={onChange}
       />
-      <div className="error">{error}</div>
+      {isArray ? (
+        error.map((e, index) => (
+          <div key={index} className="error font-normal text-red-700 text-sm">
+            {e}
+          </div>
+        ))
+      ) : (
+        <div className="error font-normal text-red-700 text-sm">{error}</div>
+      )}
     </div>
   );
 };

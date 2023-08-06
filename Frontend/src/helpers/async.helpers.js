@@ -18,9 +18,15 @@ const addContact = async (data) => {
       'http://127.0.0.1:8000/api/contacts/add',
       data
     );
-    console.log(res);
+    return res;
   } catch (error) {
-    console.log(error);
+    const {
+      response: {
+        data: { errors, message },
+      },
+    } = error;
+
+    return { errors, message };
   }
 };
 
