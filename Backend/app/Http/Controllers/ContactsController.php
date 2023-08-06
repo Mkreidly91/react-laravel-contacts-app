@@ -139,7 +139,6 @@ class ContactsController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th,
-
             ], 500);
         }
 
