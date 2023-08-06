@@ -20,6 +20,7 @@ const addContact = async (data) => {
     );
     return res;
   } catch (error) {
+    console.log(error);
     const {
       response: {
         data: { errors, message },
