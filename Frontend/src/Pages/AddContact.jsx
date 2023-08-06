@@ -1,55 +1,45 @@
 import React, { useEffect, useState, useRef, Fragment } from 'react';
-import { addContact } from '../../helpers/async.helpers';
-import { toBase64 } from '../../helpers/input.helpers';
+import { addContact } from '../helpers/async.helpers';
+import { toBase64 } from '../helpers/input.helpers';
 import { Combobox, Transition } from '@headlessui/react';
-import noImage from '../../assets/images/placeholder.png';
+import noImage from '../assets/images/Artwork_1.png';
 import axios from 'axios';
-import ContactInput from '../Inputs/ContactInput';
-
-/* 
-TODOS:
- - Image preview, split the form in half image on the right
- - Recieve Image on the backend, save in public
- - handle error display
- - Display success message
- - Fix Styling
-                
-*/
-const AddContact = () => {
-  const [data, setData] = useState({
+import ContactInput from '../Components/Inputs/ContactInput';
+import { Link } from 'react-router-dom';
+const initialData = {
+  name: '',
+  number: '',
+  img: '',
+  location: {
     name: '',
-    number: '',
-    img: '',
-    location: {
-      name: '',
-      coordinates: {
-        lon: '',
-        lat: '',
-      },
+    coordinates: {
+      lon: '',
+      lat: '',
     },
-  });
+  },
+};
+
+const initialErrors = {
+  name: '',
+  number: '',
+  'location.coordinats.lat': '',
+  'location.coordinats.lon': '',
+  'location.name': '',
+};
+
+const AddContact = () => {
+  const [data, setData] = useState(initialData);
 
   const [queryLocations, setQueryLocations] = useState([]);
-  const [errors, setErrors] = useState({
-    name: '',
-    number: '',
-    'location.coordinats.lat': '',
-    'location.coordinats.lon': '',
-    'location.name': '',
-  });
+  const [errors, setErrors] = useState(initialErrors);
 
   console.log(errors);
   const timeout = useRef();
 
-  function errorHandler() {
-    const { name, number, location } = data;
-    const {
-      name: location_name,
-      coordinates: { lon, lat },
-    } = location;
-
-    const textInputs = [name, number];
-    const locationInputs = [];
+  function refreshState() {
+    setData(initialData);
+    setQueryLocations([]);
+    setErrors(initialErrors);
   }
 
   async function handleDebounceSearch(e) {
@@ -132,7 +122,10 @@ const AddContact = () => {
 
     const { errors } = await addContact(trimmedData);
     console.log(errors);
-    if (!errors) return;
+    if (!errors) {
+      refreshState();
+      return;
+    }
 
     setErrors({
       ...errors,
@@ -201,7 +194,6 @@ const AddContact = () => {
             value={data.location.coordinates.lon}
             type="text"
             onChange={textInputHandler}
-            // error={errors.lon}
             className={'w-24'}
           />
           <ContactInput
@@ -210,7 +202,6 @@ const AddContact = () => {
             value={data.location.coordinates.lat}
             type="text"
             onChange={textInputHandler}
-            // error={errors.lat}
             className={'w-24'}
           />
         </div>
@@ -224,7 +215,9 @@ const AddContact = () => {
           <div className="button" onClick={save}>
             SAVE
           </div>
-          <div className="button">Cancel</div>
+          <Link to="/">
+            <div className="button">Cancel</div>
+          </Link>
         </div>
       </div>
       <div className="image-select-preview flex flex-col w-[300px]  rounded">

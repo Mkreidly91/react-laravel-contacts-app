@@ -4,12 +4,19 @@ import trash from '../../assets/icons/trash-2 copy.svg';
 import phone from '../../assets/icons/phone-call.svg';
 import Location from '../../assets/icons/location-1.svg';
 import { deleteContact } from '../../helpers/async.helpers';
+import { Link } from 'react-router-dom';
 
 import './Card.css';
 const Card = (props) => {
   const { contact, del } = props;
   const { name, number, location, image_url, id } = contact;
   const parsedLocation = JSON.parse(location);
+
+  const {
+    name: location_name,
+    coordinates: { lon, lat },
+  } = parsedLocation;
+
   console.log(contact);
   return (
     <div className="card-container relative flex flex-col items-center justify-between bg-white p-5 rounded-2xl neumorph">
@@ -34,8 +41,10 @@ const Card = (props) => {
               <span className="number">{number}</span>
             </div>
             <div className="icon-container flex gap-2">
-              <img className=" w-[18px] h-[18px]" src={Location} alt="" />
-              <span className="location">{parsedLocation.name}</span>
+              <Link to="/map" state={[lon, lat]}>
+                <img className=" w-[18px] h-[18px]" src={Location} alt="" />
+              </Link>
+              <span className="location">{location_name}</span>
             </div>
           </div>
         </div>
