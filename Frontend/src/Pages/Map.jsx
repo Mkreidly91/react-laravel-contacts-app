@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 const Map = () => {
   const { state } = useLocation();
-  const [lon, lat] = state;
+  const { name, number, lon, lat, location_name } = state;
   console.log(state);
   return (
     <div className="">
@@ -22,7 +22,12 @@ const Map = () => {
         />
         <Marker position={[lon, lat]} draggable>
           <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+            <div>
+              <img src="" alt="" />
+              <h3>{name}</h3>
+              <p>{location_name}</p>
+              <p>{number}</p>
+            </div>
           </Popup>
         </Marker>
       </MapContainer>

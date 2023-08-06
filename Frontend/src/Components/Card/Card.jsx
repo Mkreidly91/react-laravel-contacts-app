@@ -41,7 +41,7 @@ const Card = (props) => {
               <span className="number">{number}</span>
             </div>
             <div className="icon-container flex gap-2">
-              <Link to="/map" state={[lon, lat]}>
+              <Link to="/map" state={{ lon, lat, name, number, location_name }}>
                 <img className=" w-[18px] h-[18px]" src={Location} alt="" />
               </Link>
               <span className="location">{location_name}</span>
