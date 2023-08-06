@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-//image, name, number, address, locaation
 import trash from '../../assets/icons/trash-2 copy.svg';
 import phone from '../../assets/icons/phone-call.svg';
 import Location from '../../assets/icons/location-1.svg';
 import { deleteContact } from '../../helpers/async.helpers';
 import { Link } from 'react-router-dom';
+import noImage from '../../assets/images/Artwork_1.png';
 
 import './Card.css';
 const Card = (props) => {
@@ -22,27 +22,31 @@ const Card = (props) => {
     <div className="card-container relative flex flex-col items-center justify-between bg-white p-5 rounded-2xl neumorph">
       <img
         color="white"
-        className="delete w-[18px] h-[18px] absolute top-8 right-8 grow"
+        className="delete w-[22px] h-[22px] absolute top-4 right-4 grow"
         src={trash}
         alt=""
         onClick={() => {
           del(id);
         }}
       />
-      <div className="image-container w-[150px] flex justify center">
-        <img className="w-full rounded-xl" src={image_url} alt="" />
+      <div className="image-container w-[200px] aspect-square flex justify center">
+        <img
+          className="w-full rounded-xl"
+          src={image_url ? image_url : noImage}
+          alt=""
+        />
       </div>
       <div className="contact-details text-center text-sm font-normal">
         <div className="flex flex-col gap-3">
-          <span className="name font-semibold ">{name}</span>
-          <div className="info-wrapper flex flex-col gap-1">
-            <div className="icon-container flex gap-2">
-              <img className=" w-[18px] h-[18px]" src={phone} alt="" />
+          <span className="name font-semibold text-lg mt-3">{name}</span>
+          <div className="info-wrapper flex flex-col gap-3">
+            <div className="icon-container flex items-center gap-3">
+              <img className=" w-[20] h-[20]" src={phone} alt="" />
               <span className="number">{number}</span>
             </div>
-            <div className="icon-container flex gap-2">
+            <div className="icon-container flex  items-center gap-3">
               <Link to="/map" state={{ lon, lat, name, number, location_name }}>
-                <img className=" w-[18px] h-[18px]" src={Location} alt="" />
+                <img className=" w-[20] h-[20]" src={Location} alt="" />
               </Link>
               <span className="location">{location_name}</span>
             </div>

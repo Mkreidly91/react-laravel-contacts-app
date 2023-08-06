@@ -9,26 +9,21 @@ const ContactInput = ({
   type,
   className,
 }) => {
-  const isArray = Array.isArray(error);
   return (
-    <div className="input-container flex flex-col gap-2 font-semibold">
-      <label>{label}</label>
+    <div className="input-container flex flex-col gap-2 font-normal">
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold">
+        {label}
+      </label>
       <input
         name={name}
         value={value}
-        className={`w-60 rounded ${className}`}
+        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+          error && 'border-red-500'
+        }`}
         type={type}
         onChange={onChange}
       />
-      {isArray ? (
-        error.map((e, index) => (
-          <div key={index} className="error font-normal text-red-700 text-sm">
-            {e}
-          </div>
-        ))
-      ) : (
-        <div className="error font-normal text-red-700 text-sm">{error}</div>
-      )}
+      {<div className="error font-normal text-red-700 text-sm">{error}</div>}
     </div>
   );
 };

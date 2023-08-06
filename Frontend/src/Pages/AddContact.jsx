@@ -2,10 +2,12 @@ import React, { useEffect, useState, useRef, Fragment } from 'react';
 import { addContact } from '../helpers/async.helpers';
 import { toBase64 } from '../helpers/input.helpers';
 import { Combobox, Transition } from '@headlessui/react';
-import noImage from '../assets/images/Artwork_1.png';
+import noImage from '../assets/images/no-image.png';
+import pointer from '../assets/icons/pointer.svg';
 import axios from 'axios';
 import ContactInput from '../Components/Inputs/ContactInput';
 import { Link } from 'react-router-dom';
+import '../index.css';
 const initialData = {
   name: '',
   number: '',
@@ -35,8 +37,11 @@ const AddContact = () => {
 
   console.log(errors);
   const timeout = useRef();
+  const fileInput = useRef();
 
   function refreshState() {
+    if (fileInput.current) fileInput.current.value = '';
+
     setData(initialData);
     setQueryLocations([]);
     setErrors(initialErrors);
@@ -134,104 +139,124 @@ const AddContact = () => {
 
   const { name, number, location } = data;
   return (
-    <div className="form flex place-content-center gap-10 bg-gray-600 p-10">
-      <div className="input-wrapper flex flex-col justify-center gap-10">
-        <ContactInput
-          name="name"
-          label="Name"
-          value={name}
-          type="text"
-          onChange={textInputHandler}
-          error={errors.name}
-        />
-        <ContactInput
-          name="number"
-          label="Number"
-          value={number}
-          type="text"
-          onChange={textInputHandler}
-          error={errors.number}
-        />
-        <Combobox name="select" value={data.location} onChange={handleSelect}>
-          <div className="relative">
-            <Combobox.Input
-              className="w-full  rounded border-none focus:ring-0 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900"
-              name="location"
-              value={data.location.name}
-              onChange={(e) => {
-                e.stopPropagation();
-                textInputHandler(e);
-                handleDebounceSearch();
-              }}
-            />
-            <Transition
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Combobox.Options
-                className={
-                  'absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
-                }
+    <div>
+      <div className="form flex place-content-start gap-20 px-20 pt-20 ">
+        <div className="input-wrapper flex flex-col justify-center gap-10 self-start">
+          <ContactInput
+            name="name"
+            label="Name"
+            value={name}
+            type="text"
+            onChange={textInputHandler}
+            error={errors.name}
+          />
+          <ContactInput
+            name="number"
+            label="Number"
+            value={number}
+            type="text"
+            onChange={textInputHandler}
+            error={errors.number}
+          />
+          <Combobox name="select" value={data.location} onChange={handleSelect}>
+            <div className="relative">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold pb-2">
+                Location
+              </label>
+              <Combobox.Input
+                className={`  relative font-inherit shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                  errors['location.name'] && 'border-red-500'
+                }`}
+                id="grid-first-name"
+                name="location"
+                value={data.location.name}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  textInputHandler(e);
+                  handleDebounceSearch();
+                }}
+              />
+              <img
+                className="w-[16px] h-[16px] absolute top-[55%] right-2"
+                src={pointer}
+                alt=""
+              />
+              <Transition
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
               >
-                {queryLocations &&
-                  queryLocations.map((location, index) => (
-                    <Combobox.Option
-                      key={location.coordinates.lon}
-                      value={location}
-                    >
-                      {location.name}
-                    </Combobox.Option>
-                  ))}
-              </Combobox.Options>
-            </Transition>
+                <Combobox.Options
+                  className={
+                    'absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+                  }
+                >
+                  {queryLocations &&
+                    queryLocations.map((location, index) => (
+                      <Combobox.Option
+                        key={location.coordinates.lon}
+                        value={location}
+                        className="p-2"
+                      >
+                        {location.name}
+                      </Combobox.Option>
+                    ))}
+                </Combobox.Options>
+              </Transition>
+            </div>
+          </Combobox>
+          <div className="flex gap-10">
+            <ContactInput
+              name="lon"
+              label="Lon"
+              value={data.location.coordinates.lon}
+              type="text"
+              onChange={textInputHandler}
+              className={'w-24 font-normal '}
+            />
+            <ContactInput
+              name="lat"
+              label="lat"
+              value={data.location.coordinates.lat}
+              type="text"
+              onChange={textInputHandler}
+              className={'w-24 font-normal'}
+            />
           </div>
-        </Combobox>
-        <div className="flex gap-10">
-          <ContactInput
-            name="lon"
-            label="Lon"
-            value={data.location.coordinates.lon}
-            type="text"
-            onChange={textInputHandler}
-            className={'w-24'}
-          />
-          <ContactInput
-            name="lat"
-            label="lat"
-            value={data.location.coordinates.lat}
-            type="text"
-            onChange={textInputHandler}
-            className={'w-24'}
-          />
+          <div className="error flex flex-col font-normal text-red-700 text-sm">
+            <div>{errors['location.coordinates.lat']}</div>
+            <div> {errors['location.coordinates.lon']}</div>
+            <div>{errors['location.name']}</div>
+          </div>
         </div>
-        <div className="error font-normal text-red-700 text-sm">
-          {errors['location.coordinates.lat']}
-          {errors['location.coordinates.lon']}
-          {errors['location.name']}
-        </div>
+        <div className="image-select-preview flex flex-col rounded gap-10 min-w-[300px]">
+          <img
+            src={data.img ? data.img : noImage}
+            alt=""
+            className="rounded aspect-square w-[300px] h-[300px]"
+          />
 
-        <div className="flex gap-10">
-          <div className="button" onClick={save}>
-            SAVE
-          </div>
-          <Link to="/">
-            <div className="button">Cancel</div>
-          </Link>
+          <input
+            ref={fileInput}
+            className="file-input file-input-bordered file-input-primary w-full max-w-xs bg-purple-200 "
+            type="file"
+            accept="image/*"
+            onChange={onImageChange}
+          />
         </div>
       </div>
-      <div className="image-select-preview flex flex-col w-[300px]  rounded">
-        <img
-          src={data.img ? data.img : noImage}
-          alt=""
-          className="w-full h-full rounded"
-        />
-        <input
-          className="w-60 "
-          type="file"
-          accept="image/*"
-          onChange={onImageChange}
-        />
+      <div className="flex gap-10 px-20">
+        <div
+          className="button bg-purple-500 text-xl text-white p-5 px-10 rounded-full "
+          onClick={save}
+        >
+          SAVE
+        </div>
+        <Link to="/">
+          <div className="button text-gray-400 font-semibold text-xl p-5 px-10">
+            Cancel
+          </div>
+        </Link>
       </div>
     </div>
   );

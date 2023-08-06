@@ -10,6 +10,31 @@
   box-sizing: border-box;
 }
 
+button,
+input[type='button'],
+input[type='submit'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  /* Additional styles to customize the button */
+}
+input::file-selector-button {
+  font-family: 'Rubik', sans-serif;
+  font-weight: bold;
+  color: whitesmoke;
+  background-color: #a855f7;
+  font-weight: 500;
+  border: 1px solid #a855f7;
+  padding: 1rem;
+  border: thin solid grey;
+  border-radius: 3px;
+}
+
 Html,
 body {
   width: 100%;
@@ -25,8 +50,16 @@ a {
 
 :root {
   --app-pink: #f8f8f8;
+  --app-purple: #6418c3;
 }
 
+.bg-purple {
+  background-color: var(--app-purple);
+}
+
+.color-purple {
+  color: var(--app-purple);
+}
 .pink {
   background-color: var(--app-pink);
 }
