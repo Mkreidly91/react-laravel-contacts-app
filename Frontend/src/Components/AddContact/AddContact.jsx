@@ -20,16 +20,13 @@ const AddContact = () => {
   });
 
   async function onImageChange(e) {
-    console.log(e.target.files);
     const file = e.target.files[0];
     const base64 = await toBase64(file);
-    console.log(base64);
     setData((prev) => ({ ...prev, img: base64 }));
   }
 
   function textInputHandler(e) {
     const { value, name } = e.target;
-    console.log(e.target.value);
     setData((prev) => ({ ...prev, [name]: value }));
   }
 

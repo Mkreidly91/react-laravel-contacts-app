@@ -23,7 +23,7 @@ const ContactsPage = (props) => {
             type="search"
             placeholder="search here"
           />
-          <Link to="/some-where" state={setContacts}>
+          <Link to="/addContact">
             <img src={plus} alt="" />
           </Link>
 

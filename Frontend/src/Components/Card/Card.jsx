@@ -9,6 +9,7 @@ import './Card.css';
 const Card = (props) => {
   const { contact, del } = props;
   const { name, number, location, image_url, id } = contact;
+
   return (
     <div className="card-container relative flex flex-col items-center justify-between bg-white p-5 rounded-2xl neumorph">
       <img
