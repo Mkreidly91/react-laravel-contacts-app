@@ -23,7 +23,6 @@ class ContactsController extends Controller
                     ;
                 }
             }
-
             return response()->json([
                 'status' => 'success',
                 'contacts' => $contacts,
@@ -44,7 +43,7 @@ class ContactsController extends Controller
                 "name" => "Required|string",
                 "number" => "Required|string",
                 'location' => ['array'],
-                'location.name' => 'required|string|regex:/^[a-zA-Z0-9\s\-,.]+$/',
+                'location.name' => 'required|string',
                 'location.coordinates' => ['required', 'array', 'size:2'],
                 'location.coordinates.lon' => 'required|numeric',
                 'location.coordinates.lat' => 'required|numeric',
@@ -106,25 +105,18 @@ class ContactsController extends Controller
                 }
             }
         }
-        // Decode base 64
+
         if ($request->img) {
 
             if (!empty($imageData) && base64_decode($imageData, true)) {
-                // Extract the image extension from the data
                 $imageExtension = explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
-
-                // Generate a unique filename for the image
                 $filename = uniqid() . '.' . $imageExtension;
-
-                // Decode the base64 data
                 $decodedImage = base64_decode($imageData);
                 $image_url = 'images/' . $filename;
                 $contact->image_url = $image_url;
-                // Save the image to the storage (assuming you are using the public disk)
                 Storage::disk('public')->put('images/' . $filename, $decodedImage);
             }
         }
-
         $contact->save();
 
         return response()->json([

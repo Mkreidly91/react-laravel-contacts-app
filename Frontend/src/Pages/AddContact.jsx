@@ -35,7 +35,6 @@ const AddContact = () => {
   const [queryLocations, setQueryLocations] = useState([]);
   const [errors, setErrors] = useState(initialErrors);
 
-  console.log(errors);
   const timeout = useRef();
   const fileInput = useRef();
 
@@ -67,7 +66,7 @@ const AddContact = () => {
       });
 
       setQueryLocations(locations);
-    }, 1000);
+    }, 600);
   }
 
   async function onImageChange(e) {
@@ -80,7 +79,6 @@ const AddContact = () => {
     const { value, name } = e.target;
     const isLocationBased =
       name === 'lon' || name === 'lat' || name === 'location';
-    console.log(value, name);
 
     // contact name - number
     if (!isLocationBased) {
@@ -126,7 +124,6 @@ const AddContact = () => {
     };
 
     const { errors } = await addContact(trimmedData);
-    console.log(errors);
     if (!errors) {
       refreshState();
       return;
@@ -238,7 +235,7 @@ const AddContact = () => {
 
           <input
             ref={fileInput}
-            className="file-input file-input-bordered file-input-primary w-full max-w-xs bg-purple-200 "
+            className=" cursor-pointer file-input file-input-bordered file-input-primary w-full max-w-xs bg-purple-200 "
             type="file"
             accept="image/*"
             onChange={onImageChange}
@@ -247,13 +244,13 @@ const AddContact = () => {
       </div>
       <div className="flex gap-10 px-20">
         <div
-          className="button bg-purple-500 text-xl text-white p-5 px-10 rounded-full "
+          className=" button cursor-pointer bg-purple-500 text-xl text-white p-5 px-10 rounded-full "
           onClick={save}
         >
           SAVE
         </div>
         <Link to="/">
-          <div className="button text-gray-400 font-semibold text-xl p-5 px-10">
+          <div className=" cursor-pointer button text-gray-400 font-semibold text-xl p-5 px-10">
             Cancel
           </div>
         </Link>

@@ -33,6 +33,7 @@ input::file-selector-button {
   padding: 1rem;
   border: thin solid grey;
   border-radius: 3px;
+  cursor: pointer;
 }
 
 Html,

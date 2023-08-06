@@ -3,7 +3,7 @@ import { fetchContacts } from '../helpers/async.helpers';
 import Cards from '../Components/Cards';
 import plus from '../assets/icons/plus-circle.svg';
 import search from '../assets/icons/search.svg';
-import pointer from '../assets/icons/pointer.svg';
+
 import { Link } from 'react-router-dom';
 
 const ContactsPage = (props) => {

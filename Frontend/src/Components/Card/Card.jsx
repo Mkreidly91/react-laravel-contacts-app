@@ -17,9 +17,8 @@ const Card = (props) => {
     coordinates: { lon, lat },
   } = parsedLocation;
 
-  console.log(contact);
   return (
-    <div className="card-container relative flex flex-col items-center justify-between bg-white p-5 rounded-2xl neumorph">
+    <div className="card-container relative flex flex-col items-center justify-between bg-white p-5 rounded-2xl neumorph width-[300px] min-w-[300px] max-w-[300px]">
       <img
         color="white"
         className="delete w-[22px] h-[22px] absolute top-4 right-4 grow"
@@ -29,14 +28,15 @@ const Card = (props) => {
           del(id);
         }}
       />
+
       <div className="image-container w-[200px] aspect-square flex justify center">
         <img
           className="w-full rounded-xl"
-          src={image_url ? image_url : noImage}
+          src={image_url === 'data:;base64,' ? noImage : image_url}
           alt=""
         />
       </div>
-      <div className="contact-details text-center text-sm font-normal">
+      <div className="contact-details text-sm font-normal">
         <div className="flex flex-col gap-3">
           <span className="name font-semibold text-lg mt-3">{name}</span>
           <div className="info-wrapper flex flex-col gap-3">
@@ -48,7 +48,7 @@ const Card = (props) => {
               <Link to="/map" state={{ lon, lat, name, number, location_name }}>
                 <img className=" w-[20] h-[20]" src={Location} alt="" />
               </Link>
-              <span className="location">{location_name}</span>
+              <span className="location w-full">{location_name}</span>
             </div>
           </div>
         </div>
