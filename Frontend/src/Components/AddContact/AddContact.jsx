@@ -4,6 +4,7 @@ import { toBase64 } from '../../helpers/input.helpers';
 import { Combobox, Transition } from '@headlessui/react';
 import noImage from '../../assets/images/placeholder.png';
 import axios from 'axios';
+import ContactInput from '../Inputs/ContactInput';
 
 /* 
 TODOS:
@@ -18,6 +19,7 @@ const AddContact = () => {
   const [data, setData] = useState({
     name: '',
     number: '',
+    img: '',
     location: {
       name: '',
       coordinates: {
@@ -25,12 +27,32 @@ const AddContact = () => {
         lat: '',
       },
     },
-    img: '',
   });
-  console.log(data.location.coordinates.lon);
-  const [queryLocations, setQueryLocations] = useState([]);
 
+  const [queryLocations, setQueryLocations] = useState([]);
+  const [errors, setErrors] = useState({
+    name: '',
+    number: '',
+    location: '',
+  });
   const timeout = useRef();
+
+  function errorHandler() {
+    const { name, number, location } = data;
+    const {
+      name: location_name,
+      coordinates: { lon, lat },
+    } = location;
+
+    const emptyErrors = {
+      name: 'Please provide a name',
+      number: 'Please provide a number',
+      location: 'Please provide a location',
+    };
+
+    const textInputs = [name, number];
+    const locationInputs = [];
+  }
 
   async function handleDebounceSearch(e) {
     clearTimeout(timeout.current);
@@ -66,19 +88,27 @@ const AddContact = () => {
     const isLocationBased =
       name === 'lon' || name === 'lat' || name === 'location';
     console.log(value, name);
+
+    // contact name - number
     if (!isLocationBased) {
-      setData((prev) => ({ ...prev, [name]: value }));
-    } else if (name === 'location') {
+      setData((prev) => ({ ...prev, [name]: value.trim() }));
+    }
+
+    // Location name
+    else if (name === 'location') {
       setData((prev) => ({
         ...prev,
-        location: { ...prev.location, name: value },
+        location: { ...prev.location, name: value.trim() },
       }));
-    } else if (name === 'lat' || name === 'lon') {
+    }
+
+    // Longtitude-Latitude
+    else if (name === 'lat' || name === 'lon') {
       setData((prev) => ({
         ...prev,
         location: {
           ...prev.location,
-          coordinates: { ...prev.location.coordinates, [name]: value },
+          coordinates: { ...prev.location.coordinates, [name]: value.trim() },
         },
       }));
     }
@@ -94,25 +124,25 @@ const AddContact = () => {
   return (
     <div className="form flex place-content-center gap-10 bg-gray-600 p-10">
       <div className="input-wrapper flex flex-col justify-center gap-10">
-        <input
-          className="w-60 "
-          type="text"
+        <ContactInput
           name="name"
+          label="Name"
           value={name}
-          onChange={textInputHandler}
-        />
-        <input
-          name="number"
-          value={number}
-          className="w-60 "
           type="text"
           onChange={textInputHandler}
         />
 
+        <ContactInput
+          name="number"
+          label="Number"
+          value={number}
+          type="text"
+          onChange={textInputHandler}
+        />
         <Combobox name="select" value={data.location} onChange={handleSelect}>
           <div className="relative">
             <Combobox.Input
-              className="w-full border-none focus:ring-0 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900"
+              className="w-full  rounded border-none focus:ring-0 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900"
               name="location"
               value={data.location.name}
               onChange={(e) => {
@@ -125,7 +155,6 @@ const AddContact = () => {
               leave="transition ease-in duration-100"
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
-              // afterLeave={() => setQuery('')}
             >
               <Combobox.Options
                 className={
@@ -137,7 +166,6 @@ const AddContact = () => {
                     <Combobox.Option
                       key={location.coordinates.lon}
                       value={location}
-                      // onClick={handleSelect}
                     >
                       {location.name}
                     </Combobox.Option>
@@ -152,12 +180,14 @@ const AddContact = () => {
             name="lon"
             value={data.location.coordinates.lon}
             onChange={textInputHandler}
+            className="rounded"
           />
           <input
             type="text"
             name="lat"
             value={data.location.coordinates.lat}
             onChange={textInputHandler}
+            className="rounded"
           />
         </div>
 
@@ -173,8 +203,12 @@ const AddContact = () => {
           </div>
         </div>
       </div>
-      <div className="image-select-preview flex flex-col w-[300px]">
-        <img src={noImage} alt="" />
+      <div className="image-select-preview flex flex-col w-[300px]  rounded">
+        <img
+          src={data.img ? data.img : noImage}
+          alt=""
+          className="w-full h-full rounded"
+        />
         <input
           className="w-60 "
           type="file"
