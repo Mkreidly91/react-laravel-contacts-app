@@ -33,8 +33,12 @@ const AddContact = () => {
   const [errors, setErrors] = useState({
     name: '',
     number: '',
-    location: '',
+    'location.coordinats.lat': '',
+    'location.coordinats.lon': '',
+    'location.name': '',
   });
+
+  console.log(errors);
   const timeout = useRef();
 
   function errorHandler() {
@@ -43,12 +47,6 @@ const AddContact = () => {
       name: location_name,
       coordinates: { lon, lat },
     } = location;
-
-    const emptyErrors = {
-      name: 'Please provide a name',
-      number: 'Please provide a number',
-      location: 'Please provide a location',
-    };
 
     const textInputs = [name, number];
     const locationInputs = [];
@@ -91,14 +89,14 @@ const AddContact = () => {
 
     // contact name - number
     if (!isLocationBased) {
-      setData((prev) => ({ ...prev, [name]: value.trim() }));
+      setData((prev) => ({ ...prev, [name]: value }));
     }
 
     // Location name
     else if (name === 'location') {
       setData((prev) => ({
         ...prev,
-        location: { ...prev.location, name: value.trim() },
+        location: { ...prev.location, name: value },
       }));
     }
 
@@ -108,7 +106,7 @@ const AddContact = () => {
         ...prev,
         location: {
           ...prev.location,
-          coordinates: { ...prev.location.coordinates, [name]: value.trim() },
+          coordinates: { ...prev.location.coordinates, [name]: value },
         },
       }));
     }
@@ -119,9 +117,23 @@ const AddContact = () => {
   }
 
   async function save() {
-    const { errors } = await addContact(data);
+    const trimmedData = {
+      name: data.name.trim(),
+      number: data.number.trim(),
+      img: data.img,
+      location: {
+        name: data.location.name.trim(),
+        coordinates: {
+          lon: data.location.coordinates.lon.trim(),
+          lat: data.location.coordinates.lat.trim(),
+        },
+      },
+    };
+
+    const { errors } = await addContact(trimmedData);
     console.log(errors);
     if (!errors) return;
+
     setErrors({
       ...errors,
     });
@@ -189,7 +201,7 @@ const AddContact = () => {
             value={data.location.coordinates.lon}
             type="text"
             onChange={textInputHandler}
-            error={errors.lon}
+            // error={errors.lon}
             className={'w-24'}
           />
           <ContactInput
@@ -198,9 +210,14 @@ const AddContact = () => {
             value={data.location.coordinates.lat}
             type="text"
             onChange={textInputHandler}
-            error={errors.lat}
+            // error={errors.lat}
             className={'w-24'}
           />
+        </div>
+        <div className="error font-normal text-red-700 text-sm">
+          {errors['location.coordinates.lat']}
+          {errors['location.coordinates.lon']}
+          {errors['location.name']}
         </div>
 
         <div className="flex gap-10">

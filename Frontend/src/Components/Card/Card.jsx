@@ -9,7 +9,8 @@ import './Card.css';
 const Card = (props) => {
   const { contact, del } = props;
   const { name, number, location, image_url, id } = contact;
-
+  const parsedLocation = JSON.parse(location);
+  console.log(contact);
   return (
     <div className="card-container relative flex flex-col items-center justify-between bg-white p-5 rounded-2xl neumorph">
       <img
@@ -34,7 +35,7 @@ const Card = (props) => {
             </div>
             <div className="icon-container flex gap-2">
               <img className=" w-[18px] h-[18px]" src={Location} alt="" />
-              <span className="location">{location}</span>
+              <span className="location">{parsedLocation.name}</span>
             </div>
           </div>
         </div>

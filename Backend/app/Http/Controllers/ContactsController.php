@@ -14,7 +14,6 @@ class ContactsController extends Controller
         try {
             $contacts = Contact::all();
             foreach ($contacts as $contact) {
-
                 $img_url = $contact->image_url;
                 if (Storage::disk('public')->exists($img_url)) {
 
