@@ -44,7 +44,11 @@ class ContactsController extends Controller
             [
                 "name" => "Required|string",
                 "number" => "Required|string",
-                'location' => 'required|string|regex:/^[a-zA-Z0-9\s\-,.]+$/',
+                'location' => ['array'],
+                'location.name' => 'required|string|regex:/^[a-zA-Z0-9\s\-,.]+$/',
+                'location.coordinates' => ['required', 'array', 'size:2'],
+                'location.coordinates.lon' => 'required|numeric',
+                'location.coordinates.lat' => 'required|numeric',
             ]
 
         );
@@ -53,7 +57,7 @@ class ContactsController extends Controller
 
         $contact->name = $request->name;
         $contact->number = $request->number;
-        $contact->location = $request->location;
+        $contact->location = json_encode($request->location);
 
         // Decode base 64
         $image_64 = $request->img;
@@ -67,8 +71,9 @@ class ContactsController extends Controller
             $image_url = 'images/' . $filename;
             Storage::disk('public')->put('images/' . $filename, base64_decode($image));
             $contact->image_url = $image_url;
+        } else {
+            $contact->image_url = "";
         }
-
 
 
         try {
@@ -77,6 +82,7 @@ class ContactsController extends Controller
                 'message' => 'success'
             ], 200);
         } catch (\Exception $e) {
+            dd($e);
             return response()->json([
                 'message' => $e,
             ], 500);
