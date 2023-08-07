@@ -80,7 +80,6 @@ class ContactsController extends Controller
                 'message' => 'success'
             ], 200);
         } catch (\Exception $e) {
-            dd($e);
             return response()->json([
                 'message' => $e,
             ], 500);
